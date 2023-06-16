@@ -59,7 +59,7 @@ async function CreateMessage(message) {
 
   const distancesFromAddress = await GetWorkplaceDistances(address);
   let response = "";
-  response += `**Distances from ${address}:**\n`;
+  response += `**${address}:**\n`;
   for (const [workPlace, time] of Object.entries(distancesFromAddress)) {
     response += workPlace + " - " + time + "\n";
   }
