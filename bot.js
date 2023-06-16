@@ -27,8 +27,8 @@ const gateway = new WebSocketManager({
 const client = new Client({ rest, gateway });
 const channels = new ChannelsAPI(rest);
 
-const generalChannelID = "1119254827483009026";
-const botChannelID = "1119254974313017414";
+const generalChannelID = "1115943750838009866";
+const botChannelID = "1119373027289862227";
 
 // client.once(GatewayDispatchEvents.Ready, async () => {
 //   const messageObjects = await channels.getMessages(generalChannelID);
