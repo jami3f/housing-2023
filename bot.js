@@ -44,7 +44,7 @@ const botChannelID = "1119254974313017414";
 
 client.on(GatewayDispatchEvents.MessageCreate, async (message) => {
     const content = message.data.content;
-  if (!content.startsWith("https") || message.channelId === botChannelID) return;
+  if (!content.startsWith("https://rightmove.co.uk") || message.channelId === botChannelID) return;
   CreateMessage(content);
 });
 
