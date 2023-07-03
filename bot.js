@@ -41,7 +41,7 @@ client.on(GatewayDispatchEvents.MessageCreate, async (message) => {
     message.channelId === botChannelID
   )
     return;
-  CreateMessage(content, (test = message.channelId === testInChannelID));
+  CreateMessage(content, message.channelId === testInChannelID);
 });
 
 gateway.connect();
