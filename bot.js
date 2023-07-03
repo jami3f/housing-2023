@@ -1,6 +1,7 @@
 import "dotenv/config";
 import { REST } from "@discordjs/rest";
 import { WebSocketManager } from "@discordjs/ws";
+import { inspect } from "util";
 import {
   GatewayDispatchEvents,
   GatewayIntentBits,
@@ -27,21 +28,20 @@ const gateway = new WebSocketManager({
 const client = new Client({ rest, gateway });
 const channels = new ChannelsAPI(rest);
 
-const generalChannelID = "1115943750838009866";
-const botChannelID = "1119373027289862227";
+// const generalChannelID = "1115943750838009866";
+// const botChannelID = "1119373027289862227";
 const testInChannelID = "1119254827483009026";
 const testOutChannelID = "1119254974313017414";
 
-client.on(GatewayDispatchEvents.MessageCreate, async (message) => {
+client.on(GatewayDispatchEvents.MessageCreate, (message) => {
   const content = message.data.content;
   if (
-    (!content.includes("https://www.rightmove.co.uk") &&
-      !content.includes("https://www.zoopla.co.uk") &&
-      !content.includes("https://openrent.co.uk")) ||
-    message.channelId === botChannelID
+    !content.includes("https://www.rightmove.co.uk") &&
+    !content.includes("https://www.zoopla.co.uk") &&
+    !content.includes("https://www.openrent.co.uk")
   )
     return;
-  CreateMessage(content, message.channelId === testInChannelID);
+  CreateMessage(content, message.data.channel_id === testInChannelID);
 });
 
 gateway.connect();
@@ -56,7 +56,7 @@ async function CreateMessage(message, test = false) {
   if (title.includes(" in ")) {
     address = title.split(" in ")[1];
   } else {
-    address = title.split(", ")[1];
+    address = title.split(", ").slice(1).join(", ");
   }
 
   if (address.includes(" - ")) {
