@@ -30,21 +30,15 @@ const channels = new ChannelsAPI(rest);
 const generalChannelID = "1115943750838009866";
 const botChannelID = "1119373027289862227";
 
-// client.once(GatewayDispatchEvents.Ready, async () => {
-//   const messageObjects = await channels.getMessages(generalChannelID);
-//   const messages = messageObjects
-//     .map((message) => message.content)
-//     .filter((message) => message.startsWith("https"));
-
-//   for (const message of messages) {
-//     await CreateMessage(message);
-//   }
-// //   gateway.destroy();
-// });
-
 client.on(GatewayDispatchEvents.MessageCreate, async (message) => {
-    const content = message.data.content;
-  if (!content.startsWith("https://www.rightmove.co.uk") || message.channelId === botChannelID) return;
+  const content = message.data.content;
+  if (
+    (!content.includes("https://www.rightmove.co.uk") &&
+      !content.includes("https://www.zoopla.co.uk") &&
+      !content.includes("https://openrent.co.uk")) ||
+    message.channelId === botChannelID
+  )
+    return;
   CreateMessage(content);
 });
 
@@ -54,9 +48,18 @@ async function CreateMessage(message) {
   const res = await fetch(message);
   const html = await res.text();
   const dom = new JSDOM(html);
+  const title = dom.window.document.title;
+  console.log(title);
+  let address;
+  if (title.includes(" in ")) {
+    address = title.split(" in ")[1];
+  } else {
+    address = title.split(", ")[1];
+  }
 
-  const address = dom.window.document.title.split("rent in ")[1];
-
+  if (address.includes(" - ")) {
+    address = address.split(" - ")[0];
+  }
   const distancesFromAddress = await GetWorkplaceDistances(address);
   let response = "";
   response += `**${address}:**\n`;
