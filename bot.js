@@ -32,22 +32,29 @@ const channels = new ChannelsAPI(rest);
 // const botChannelID = "1119373027289862227";
 const testInChannelID = "1119254827483009026";
 const testOutChannelID = "1119254974313017414";
+const testManChannelID = "1125536449366855730";
 
 client.on(GatewayDispatchEvents.MessageCreate, (message) => {
   const content = message.data.content;
   if (
-    !content.includes("https://www.rightmove.co.uk") &&
-    !content.includes("https://www.zoopla.co.uk") &&
-    !content.includes("https://www.openrent.co.uk")
-  )
-    return;
-  CreateMessage(content, message.data.channel_id === testInChannelID);
+    content.includes("https://www.rightmove.co.uk") ||
+    content.includes("https://www.zoopla.co.uk") ||
+    content.includes("https://www.openrent.co.uk")
+  ) {
+    const address = getLocationFromPage(content);
+    CreateMessage(address, message.data.channel_id === testInChannelID);
+  } else if (message.data.channel_id === testManChannelID) {
+    CreateMessage(content, true);
+  }
+  else if(message.data.channel_id === testInChannelID){
+    channels.createMessage(content);
+  }
 });
 
 gateway.connect();
 
-async function CreateMessage(message, test = false) {
-  const res = await fetch(message);
+async function getLocationFromPage(url) {
+  const res = await fetch(url);
   const html = await res.text();
   const dom = new JSDOM(html);
   const title = dom.window.document.title;
@@ -62,6 +69,10 @@ async function CreateMessage(message, test = false) {
   if (address.includes(" - ")) {
     address = address.split(" - ")[0];
   }
+  return address;
+}
+
+async function CreateMessage(address, test = false) {
   const distancesFromAddress = await GetWorkplaceDistances(address);
   let response = "";
   response += `**${address}:**\n`;
