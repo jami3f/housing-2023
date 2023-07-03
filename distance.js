@@ -33,12 +33,20 @@ export async function GetWorkplaceDistances(placeName) {
     },
     timeout: 1000,
   });
-
-  return {
-    Computacenter: distanceToHatfield.data.rows[0].elements[0].duration.text,
-    Hutch: distanceToHutch.data.rows[0].elements[0].duration.text,
-    NaturalMotion: distanceToNM.data.rows[0].elements[0].duration.text,
-  };
+  try {
+    return {
+      Computacenter: distanceToHatfield.data.rows[0].elements[0].duration.text,
+      Hutch: distanceToHutch.data.rows[0].elements[0].duration.text,
+      NaturalMotion: distanceToNM.data.rows[0].elements[0].duration.text,
+    };
+  } catch (e) {
+    console.log(e);
+    return {
+      Computacenter: "Error",
+      Hutch: "Error",
+      NaturalMotion: "Error",
+    };
+  }
 }
 
 export async function GetDistanceToStore(house, store) {

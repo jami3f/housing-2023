@@ -42,8 +42,8 @@ client.on(GatewayDispatchEvents.MessageCreate, (message) => {
     content.includes("https://www.zoopla.co.uk") ||
     content.includes("https://www.openrent.co.uk")
   ) {
-    const address = getLocationFromPage(content);
-    CreateMessage(address, message.data.channel_id === testInChannelID);
+    const location = getLocationFromPage(content);
+    CreateMessage(location, message.data.channel_id === testInChannelID);
   } else if (message.data.channel_id === testManChannelID) {
     CreateMessage(content, true);
   }
@@ -74,6 +74,7 @@ async function getLocationFromPage(url) {
 }
 
 async function CreateMessage(address, test = false) {
+  console.log(address)
   const distancesFromAddress = await GetWorkplaceDistances(address);
   let response = "";
   response += `**${address}:**\n`;

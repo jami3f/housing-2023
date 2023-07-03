@@ -28,13 +28,24 @@ export async function GetLocalStores(placeName) {
     },
     timeout: 1000,
   });
-
-  const distancesToStores = await Promise.all(
-    storesNearby.data.results.map(async (store) => ({
-      name: store.name,
-      distance: await GetDistanceToStore(latLong, store.geometry.location),
-    })).slice(0, 5)
-  );
+  let distancesToStores;
+  try {
+    distancesToStores = await Promise.all(
+      storesNearby.data.results
+        .map(async (store) => ({
+          name: store.name,
+          distance: await GetDistanceToStore(latLong, store.geometry.location),
+        }))
+        .slice(0, 5)
+    );
+  } catch (e) {
+    console.log(e);
+    return {
+      Computacenter: "Error",
+      Hutch: "Error",
+      NaturalMotion: "Error",
+    };
+  }
 
   return distancesToStores;
 }
