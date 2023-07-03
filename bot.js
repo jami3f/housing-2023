@@ -33,6 +33,7 @@ const channels = new ChannelsAPI(rest);
 const testInChannelID = "1119254827483009026";
 const testOutChannelID = "1119254974313017414";
 const testManChannelID = "1125536449366855730";
+const manualChannelID = "1125538917844783225";
 
 client.on(GatewayDispatchEvents.MessageCreate, (message) => {
   const content = message.data.content;
@@ -46,7 +47,7 @@ client.on(GatewayDispatchEvents.MessageCreate, (message) => {
   } else if (message.data.channel_id === testManChannelID) {
     CreateMessage(content, true);
   }
-  else if(message.data.channel_id === testInChannelID){
+  else if(message.data.channel_id === testInChannelID || message.data.channel_id === manualChannelID){
     channels.createMessage(content);
   }
 });
