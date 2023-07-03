@@ -29,6 +29,8 @@ const channels = new ChannelsAPI(rest);
 
 const generalChannelID = "1115943750838009866";
 const botChannelID = "1119373027289862227";
+const testInChannelID = "1119254827483009026";
+const testOutChannelID = "1119254974313017414";
 
 client.on(GatewayDispatchEvents.MessageCreate, async (message) => {
   const content = message.data.content;
@@ -39,12 +41,12 @@ client.on(GatewayDispatchEvents.MessageCreate, async (message) => {
     message.channelId === botChannelID
   )
     return;
-  CreateMessage(content);
+  CreateMessage(content, (test = message.channelId === testInChannelID));
 });
 
 gateway.connect();
 
-async function CreateMessage(message) {
+async function CreateMessage(message, test = false) {
   const res = await fetch(message);
   const html = await res.text();
   const dom = new JSDOM(html);
@@ -72,6 +74,9 @@ async function CreateMessage(message) {
   for (const store of closestStores) {
     response += store.name + " - " + store.distance + "\n";
   }
-
-  channels.createMessage(botChannelID, { content: response });
+  if (test) {
+    channels.createMessage(testOutChannelID, { content: response });
+  } else {
+    channels.createMessage(botChannelID, { content: response });
+  }
 }

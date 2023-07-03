@@ -17,17 +17,17 @@ async function CreateMessage(message) {
   const html = await res.text();
   const dom = new JSDOM(html);
   const title = dom.window.document.title;
-  console.log(title)
   let address;
   if (title.includes(" in ")) {
     address = title.split(" in ")[1];
   } else {
     address = title.split(", ")[1];
   }
-
+  
   if (address.includes(" - ")) {
     address = address.split(" - ")[0];
   }
+  console.log(address)
 
   //     const distancesFromAddress = await GetWorkplaceDistances(address);
   //     let response = "";
