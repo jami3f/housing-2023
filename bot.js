@@ -1,12 +1,9 @@
 import "dotenv/config";
 import { REST } from "@discordjs/rest";
 import { WebSocketManager } from "@discordjs/ws";
-import { inspect } from "util";
 import {
   GatewayDispatchEvents,
   GatewayIntentBits,
-  InteractionType,
-  MessageFlags,
   Client,
   ChannelsAPI,
 } from "@discordjs/core";
@@ -59,7 +56,6 @@ async function getLocationFromPage(url) {
   const html = await res.text();
   const dom = new JSDOM(html);
   const title = dom.window.document.title;
-  console.log(title);
   let address;
   if (title.includes(" in ")) {
     address = title.split(" in ")[1];
@@ -74,7 +70,6 @@ async function getLocationFromPage(url) {
 }
 
 async function CreateMessage(address, test = false) {
-  console.log(address)
   const distancesFromAddress = await GetWorkplaceDistances(address);
   let response = "";
   response += `**${address}:**\n`;
@@ -84,7 +79,7 @@ async function CreateMessage(address, test = false) {
 
   const closestStores = await GetLocalStores(address);
   response += "\nTop 5 supermarkets within 1km:\n";
-  for (const store of closestStores) {
+  for (const store of Object.entries(closestStores)) {
     response += store.name + " - " + store.distance + "\n";
   }
   if (test) {
