@@ -29,8 +29,8 @@ const channels = new ChannelsAPI(rest);
 // const botChannelID = "1119373027289862227";
 const testInChannelID = "1119254827483009026";
 const testOutChannelID = "1119254974313017414";
-const testManChannelID = "1125536449366855730";
-const manualChannelID = "1125538917844783225";
+const testManChannelID = "1119254974313017414";
+const manualChannelID = "1119373027289862227";
 
 client.on(GatewayDispatchEvents.MessageCreate, (message) => {
   const content = message.data.content;
