@@ -34,7 +34,6 @@ export async function GetWorkplaceDistances(placeName) {
     },
     timeout: 1000,
   });
-  console.log(inspect(distanceToHatfield.data.rows));
   if (
     !distanceToHatfield.data.rows[0].elements[0].duration ||
     !distanceToHutch.data.rows[0].elements[0].duration ||

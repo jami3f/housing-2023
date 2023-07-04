@@ -26,11 +26,10 @@ const client = new Client({ rest, gateway });
 const channels = new ChannelsAPI(rest);
 
 // const generalChannelID = "1115943750838009866";
-// const botChannelID = "1119373027289862227";
+const botChannelID = "1119373027289862227";
 const testInChannelID = "1119254827483009026";
 const testOutChannelID = "1119254974313017414";
 const testManChannelID = "1119254974313017414";
-const manualChannelID = "1119373027289862227";
 
 client.on(GatewayDispatchEvents.MessageCreate, (message) => {
   const content = message.data.content;
@@ -41,11 +40,8 @@ client.on(GatewayDispatchEvents.MessageCreate, (message) => {
   ) {
     const location = getLocationFromPage(content);
     CreateMessage(location, message.data.channel_id === testInChannelID);
-  } else if (message.data.channel_id === testManChannelID) {
-    CreateMessage(content, true);
-  }
-  else if(message.data.channel_id === testInChannelID || message.data.channel_id === manualChannelID){
-    channels.createMessage(content);
+  } else if ((message.data.channel_id === testOutChannelID || message.data.channel_id === botChannelID) && !message.data.author.bot) {
+    CreateMessage(content, message.data.channel_id === testOutChannelID);
   }
 });
 
