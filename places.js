@@ -16,7 +16,7 @@ export async function GetLocalStores(placeName) {
     },
   });
   if (geoCoded.data.status !== "OK") {
-    return { Computacenter: "Error", Hutch: "Error", NaturalMotion: "Error" };
+    return [{name: "Error", distance: "Could not find location"}];
   }
   const latLong = geoCoded.data.results[0].geometry.location;
   const storesNearby = await mapClient.placesNearby({

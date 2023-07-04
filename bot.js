@@ -79,7 +79,7 @@ async function CreateMessage(address, test = false) {
 
   const closestStores = await GetLocalStores(address);
   response += "\nTop 5 supermarkets within 1km:\n";
-  for (const store of Object.entries(closestStores)) {
+  for (const store of closestStores) {
     response += store.name + " - " + store.distance + "\n";
   }
   if (test) {

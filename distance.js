@@ -1,5 +1,6 @@
 import { Client, TravelMode } from "@googlemaps/google-maps-services-js";
 import "dotenv/config";
+import { inspect } from "util";
 
 const mapClient = new Client({});
 
@@ -33,10 +34,11 @@ export async function GetWorkplaceDistances(placeName) {
     },
     timeout: 1000,
   });
+  console.log(inspect(distanceToHatfield.data.rows));
   if (
-    !distanceToHatfield.data.rows.elements  ||
-    !distanceToHutch.data.rows.elements  ||
-    !distanceToNM.data.rows.elements 
+    !distanceToHatfield.data.rows[0].elements[0].duration ||
+    !distanceToHutch.data.rows[0].elements[0].duration ||
+    !distanceToNM.data.rows[0].elements[0].duration
   )
     return {
       Computacenter: "Error",
