@@ -9,8 +9,10 @@ import {
 } from "@discordjs/core";
 import fetch from "node-fetch";
 import { JSDOM } from "jsdom";
+
 import { GetWorkplaceDistances } from "./distance.js";
 import { GetLocalStores } from "./places.js";
+import { GetDirections } from "./directions.js";
 
 const token = process.env.DISCORD_TOKEN;
 
@@ -40,8 +42,18 @@ client.on(GatewayDispatchEvents.MessageCreate, (message) => {
   ) {
     const location = getLocationFromPage(content);
     CreateMessage(location, message.data.channel_id === testInChannelID);
-  } else if ((message.data.channel_id === testOutChannelID || message.data.channel_id === botChannelID) && !message.data.author.bot) {
+  } else if (
+    (message.data.channel_id === testOutChannelID ||
+      message.data.channel_id === botChannelID) &&
+    !message.data.author.bot
+  ) {
     CreateMessage(content, message.data.channel_id === testOutChannelID);
+  } else if (
+    message.data.channel_id === testManChannelID &&
+    !message.data.author.bot
+  ) {
+    console.log("manual");
+    RoutesTest(content);
   }
 });
 
@@ -67,14 +79,19 @@ async function getLocationFromPage(url) {
 
 async function CreateMessage(address, test = false) {
   const distancesFromAddress = await GetWorkplaceDistances(address);
+  const directions = await GetDirections(address);
   let response = "";
-  response += `**${address}:**\n`;
+  response += `**${address}:**`;
   for (const [workPlace, time] of Object.entries(distancesFromAddress)) {
-    response += workPlace + " - " + time + "\n";
+    response += "\n" + workPlace + " - " + time;
+    if(workPlace !== "Computacenter") {
+      response += " - " + directions[workPlace];
+    }
+    // response += "\n";
   }
 
   const closestStores = await GetLocalStores(address);
-  response += "\nTop 5 supermarkets within 1km:\n";
+  response += "\n\nTop 5 supermarkets within 1km:\n";
   for (const store of closestStores) {
     response += store.name + " - " + store.distance + "\n";
   }
