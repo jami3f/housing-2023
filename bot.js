@@ -50,4 +50,4 @@ async function CreateMessage(content, channelID) {
   writeFileSync("messages.txt", `\n${response}`, { flag: "a" });
 }
 
-CreateMessage("hello", testOutChannelID);
+// CreateMessage("hello", testOutChannelID);
